@@ -3,7 +3,8 @@ import { Persona } from './Interfaces/IPersona'
 
 interface Props{
   saludo : string,
-  traerPersona: (p:Persona) => void
+  traerPersona: (p:Persona) => void,
+  refrescar: boolean
 }
 
 export const MostrarPersonas = (props:Props) => {
@@ -15,7 +16,7 @@ export const MostrarPersonas = (props:Props) => {
           let listado = JSON.parse(listadoStr)
           setPersonas(listado)
         }
-      },[])
+      },[props.refrescar])
     const queEditar = (index:number) => {
       alert("Le diste a "+index)
       props.traerPersona(personas[index])
