@@ -7,7 +7,8 @@ import MostrarPersonas from "./MostrarPersonas";
 const  initialStatePersona:Persona = {
   id:"",
   apellido: "",
-  nombre: ""
+  nombre: "",
+  edad: 0
 }
 export default function Home() {
   const miStorage = window.localStorage
@@ -26,9 +27,27 @@ export default function Home() {
   },[]) 
 
   const handleRegistrar = ()=>{
-    miStorage.setItem("personas",JSON.stringify([...personas,persona]))
+    const nuevaPersona = { ...persona, id: crypto.randomUUID()} 
+    const nuevasPersonas = [...personas, nuevaPersona]
+    miStorage.setItem("personas",JSON.stringify(nuevasPersonas))
+    setPersonas(nuevasPersonas)
+    setPersona(initialStatePersona) 
+    setRefrescar(!refrescar) 
   }
+
+  const [eEdad, setEEdad] = useState("")
+
   const handlePersona = (name:string,value:string)=>{
+    if(name == "edad") {
+      const edadNum = Number(value)
+      setPersona({ ...persona, [name]: edadNum})
+      if (edadNum <= 0){
+        setEEdad("La edad debe ser mayor que 0")
+      } else {
+        setEEdad("")
+      }
+
+    }else {
     setPersona(
       { ...persona, [name] : value  }
     )
@@ -36,18 +55,22 @@ export default function Home() {
       setENombre("El nombre debe tener 3 caracteres como minimo")
     }else if(name=="nombre" && value.length>=3){
       setENombre("")
-    }
+    }}
   }
 
   const handlePersonaA = (name: string, value: string) => {
-    setPersonaA({ ...personaA, [name]: value})
+    if (name == "edad"){
+      setPersonaA({ ...personaA, [name] : Number(value)})
+    } else {
+      setPersonaA({ ...personaA, [name]: value})
+    }
   }
 
   const handleActualizar = ()=>{
     const nuevasPersonas = personas.map(p =>
       p.id == personaA.id ? personaA : p
     )
-    localStorage.setItem("personas", JSON.stringify(nuevasPersonas))
+    miStorage.setItem("personas", JSON.stringify(nuevasPersonas))
     setPersonas(nuevasPersonas)
     setPersonaA(initialStatePersona)
     setRefrescar(!refrescar)
@@ -83,6 +106,16 @@ export default function Home() {
               placeholder="Apellido"
               onChange={(e)=>{handlePersona(e.currentTarget.name,e.currentTarget.value)}}/><br/>
           <span></span>
+
+          <label>Edad</label><br/>
+          <input
+            name="edad"
+            type="number"
+            placeholder="Edad"
+            value={persona.edad}
+            onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}/><br />
+          <span>{eEdad}</span>
+
           <button 
           onClick={()=>{handleRegistrar()}}>Registrar</button>
         </form>
@@ -106,6 +139,16 @@ export default function Home() {
               value={personaA.apellido}
               onChange={(e)=>{handlePersonaA(e.currentTarget.name,e.currentTarget.value)}}/><br/>
           <span></span>
+
+          <label>Edad</label><br/>
+          <input
+            name="edad"
+            type="number"
+            
+            value={personaA.edad}
+            onChange={(e)=>{handlePersonaA(e.currentTarget.name, e.currentTarget.value)}}/><br/>
+            <span>{eEdad}</span>
+
           <button 
           onClick={(e)=>{e.preventDefault(), handleActualizar()}}>Editar</button>
         </form>
