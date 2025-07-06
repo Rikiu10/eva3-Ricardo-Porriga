@@ -144,7 +144,7 @@ export default function Home() {
           <input
             name="edad"
             type="number"
-            
+            placeholder="Edad"
             value={personaA.edad}
             onChange={(e)=>{handlePersonaA(e.currentTarget.name, e.currentTarget.value)}}/><br/>
             <span>{eEdad}</span>
