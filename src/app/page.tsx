@@ -53,10 +53,17 @@ export default function Home() {
     setRefrescar(!refrescar)
   }
 
+  const eliminarPersona =(id: string) => {
+    const nuevasPersonas = personas.filter((p) => p.id !== id)
+    miStorage.setItem("personas", JSON.stringify(nuevasPersonas))
+    setPersonas(nuevasPersonas)
+    setRefrescar(!refrescar)
+  }
+
   const traerPersona = (p:Persona)=>{
     setPersonaA(p)
   }
-  
+
   return (
         <>
         <form>
@@ -79,7 +86,7 @@ export default function Home() {
           <button 
           onClick={()=>{handleRegistrar()}}>Registrar</button>
         </form>
-        <MostrarPersonas saludo = "Hola Como estas" traerPersona = {traerPersona} refrescar={refrescar}/>
+        <MostrarPersonas saludo = "Hola Como estas" traerPersona = {traerPersona} refrescar={refrescar} eliminarPersona={eliminarPersona}/>
         <form>
           <h1>{persona.nombre} {persona.apellido}</h1>
           <label>Nombre</label><br/>

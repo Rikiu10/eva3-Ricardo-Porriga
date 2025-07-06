@@ -4,7 +4,8 @@ import { Persona } from './Interfaces/IPersona'
 interface Props{
   saludo : string,
   traerPersona: (p:Persona) => void,
-  refrescar: boolean
+  refrescar: boolean,
+  eliminarPersona: (id: string) => void
 }
 
 export const MostrarPersonas = (props:Props) => {
@@ -39,7 +40,7 @@ export const MostrarPersonas = (props:Props) => {
                 <td>{p.nombre}</td>
                 <td>{p.apellido}</td>
                 <td><button
-                        onClick={()=>queEditar(index)}>Editar</button><button>Eliminar</button></td>
+                        onClick={()=>queEditar(index)}>Editar</button><button onClick={()=> props.eliminarPersona(p.id)}>Eliminar</button></td>
               </tr>
             )
           })}
