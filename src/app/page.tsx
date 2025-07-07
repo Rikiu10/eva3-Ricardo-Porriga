@@ -8,7 +8,8 @@ const  initialStatePersona:Persona = {
   id:"",
   apellido: "",
   nombre: "",
-  edad: 0
+  edad: 0,
+  colorFavorito: ""
 }
 export default function Home() {
   const miStorage = window.localStorage
@@ -116,6 +117,22 @@ export default function Home() {
             onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}/><br />
           <span>{eEdad}</span>
 
+          <label>Color Favorito</label><br/>
+          <select
+            name="colorFavorito"
+            value={persona.colorFavorito}
+            onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}>
+
+              <option value="">Seleciona tu color favorito</option>
+              <option value="Rojo">Rojo</option>
+              <option value="Azul">Azul</option>
+              <option value="Verde">Verde</option>
+              <option value="Amarillo">Amarillo</option>
+              <option value="Naranja">Naranja</option>
+              <option value="Negro">Negro</option>
+              <option value="Rosa">Rosa</option>
+              </select><br/>
+
           <button 
           onClick={()=>{handleRegistrar()}}>Registrar</button>
         </form>
@@ -148,6 +165,22 @@ export default function Home() {
             value={personaA.edad}
             onChange={(e)=>{handlePersonaA(e.currentTarget.name, e.currentTarget.value)}}/><br/>
             <span>{eEdad}</span>
+
+            <label>Color favorito</label><br/>
+            <select
+              name="colorFavorito" //nuevo
+              value={personaA.colorFavorito}
+              onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}>
+
+              <option value="">Seleciona tu colo favorito</option>
+              <option value="Rojo">Rojo</option>
+              <option value="Azul">Azul</option>
+              <option value="Verde">Verde</option>
+              <option value="Amarillo">Amarillo</option>
+              <option value="Naranja">Naranja</option>
+              <option value="Negro">Negro</option>
+              <option value="Rosa">Rosa</option>
+              </select><br/>
 
           <button 
           onClick={(e)=>{e.preventDefault(), handleActualizar()}}>Editar</button>
