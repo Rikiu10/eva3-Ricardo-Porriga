@@ -9,7 +9,8 @@ const  initialStatePersona:Persona = {
   apellido: "",
   nombre: "",
   edad: 0,
-  colorFavorito: ""
+  colorFavorito: "",
+  comentario: ""
 }
 export default function Home() {
   const miStorage = window.localStorage
@@ -133,6 +134,14 @@ export default function Home() {
               <option value="Rosa">Rosa</option>
               </select><br/>
 
+          <label>Comentario</label><br />
+          <textarea
+            name="comentario"
+            placeholder="Escribe un comentario"
+            value={persona.comentario}
+            onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}
+            /><br />
+
           <button 
           onClick={()=>{handleRegistrar()}}>Registrar</button>
         </form>
@@ -182,10 +191,17 @@ export default function Home() {
               <option value="Rosa">Rosa</option>
               </select><br/>
 
+            <label>Comentario</label><br />
+            <textarea
+              name="comentario"
+              placeholder="Editar comentario"
+              value={personaA.comentario}
+              onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
+              /><br />
+
           <button 
           onClick={(e)=>{e.preventDefault(), handleActualizar()}}>Editar</button>
-        </form>
-        
+        </form>       
         </>
       );
 }

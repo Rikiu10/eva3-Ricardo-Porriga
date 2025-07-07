@@ -3,5 +3,6 @@ export interface Persona{
   nombre : string,
   apellido : string,
   edad : number,
-  colorFavorito: string
+  colorFavorito: string,
+  comentario : string
 }
