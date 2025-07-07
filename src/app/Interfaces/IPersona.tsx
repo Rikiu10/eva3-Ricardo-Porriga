@@ -4,5 +4,6 @@ export interface Persona{
   apellido : string,
   edad : number,
   colorFavorito: string,
-  comentario : string
+  comentario : string,
+  fechaNacimiento : string
 }

@@ -10,7 +10,8 @@ const  initialStatePersona:Persona = {
   nombre: "",
   edad: 0,
   colorFavorito: "",
-  comentario: ""
+  comentario: "",
+  fechaNacimiento: ""
 }
 export default function Home() {
   const miStorage = window.localStorage
@@ -140,7 +141,15 @@ export default function Home() {
             placeholder="Escribe un comentario"
             value={persona.comentario}
             onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}
-            /><br />
+          /><br />
+
+          <label>Fecha de nacimiento</label><br />
+          <input
+            type="date"
+            name="fechaNacimiento"
+            value={persona.fechaNacimiento}
+            onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}
+          /><br />
 
           <button 
           onClick={()=>{handleRegistrar()}}>Registrar</button>
@@ -197,7 +206,15 @@ export default function Home() {
               placeholder="Editar comentario"
               value={personaA.comentario}
               onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
-              /><br />
+            /><br />
+
+            <label>Fecha de nacimiento</label><br />
+            <input
+              type="date"
+              name="fechaNacimiento"
+              value={personaA.fechaNacimiento}
+              onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
+            /><br />
 
           <button 
           onClick={(e)=>{e.preventDefault(), handleActualizar()}}>Editar</button>
