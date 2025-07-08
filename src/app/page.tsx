@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Persona } from "./Interfaces/IPersona";
 import MostrarPersonas from "./MostrarPersonas";
 
@@ -18,8 +18,13 @@ export default function Home() {
   const [persona, setPersona] = useState(initialStatePersona)
   const [personaA,setPersonaA] = useState(initialStatePersona)
   const [personas, setPersonas] = useState<Persona[]>([])
-  const [eNombre, setENombre] = useState("")
   const [refrescar, setRefrescar] = useState(false)
+  const [eNombre, setENombre] = useState("")
+  const [eApellido, setEApellido] = useState("")
+  const [eEdad, setEEdad] = useState("")
+  const [eColor, setEColor] = useState("")
+  const [eComentario, setEComentario] = useState("")
+  const [eFecha, setEFecha] = useState("")
 
   useEffect(()=>{
     let listadoStr = miStorage.getItem("personas")
@@ -29,7 +34,14 @@ export default function Home() {
     }
   },[]) 
 
-  const handleRegistrar = ()=>{
+  const handleRegistrar = (e: React.FormEvent)=>{
+    e.preventDefault()
+    
+  if (eNombre || eEdad) {
+    alert("Corrige los errores antes de registrar.");
+    return;
+    }
+
     const nuevaPersona = { ...persona, id: crypto.randomUUID()} 
     const nuevasPersonas = [...personas, nuevaPersona]
     miStorage.setItem("personas",JSON.stringify(nuevasPersonas))
@@ -38,38 +50,145 @@ export default function Home() {
     setRefrescar(!refrescar) 
   }
 
-  const [eEdad, setEEdad] = useState("")
 
   const handlePersona = (name:string,value:string)=>{
-    if(name == "edad") {
-      const edadNum = Number(value)
-      setPersona({ ...persona, [name]: edadNum})
-      if (edadNum <= 0){
-        setEEdad("La edad debe ser mayor que 0")
-      } else {
-        setEEdad("")
-      }
+      if (name === "edad") {
+    const edadNum = Number(value);
+    setPersona({ ...persona, [name]: edadNum })
 
-    }else {
-    setPersona(
-      { ...persona, [name] : value  }
-    )
-    if (name == "nombre" && value.length<3){
-      setENombre("El nombre debe tener 3 caracteres como minimo")
-    }else if(name=="nombre" && value.length>=3){
-      setENombre("")
-    }}
+    if (edadNum <= 0) {
+      setEEdad("La edad debe ser mayor a 0")
+    } else if (edadNum > 120) {
+      setEEdad("La edad no puede ser mayor a 120")
+    } else {
+      setEEdad("")
+    }
+    return;
   }
 
-  const handlePersonaA = (name: string, value: string) => {
-    if (name == "edad"){
-      setPersonaA({ ...personaA, [name] : Number(value)})
+  setPersona({ ...persona, [name]: value });
+
+  if (name === "nombre") {
+    if (value.length < 3) {
+      setENombre("El nombre debe tener al menos 3 caracteres");
+    } else if (/\d/.test(value)) {
+      setENombre("El nombre no puede contener números");
     } else {
-      setPersonaA({ ...personaA, [name]: value})
+      setENombre("");
     }
   }
 
-  const handleActualizar = ()=>{
+  if (name === "apellido") {
+    if (value.length < 3) {
+      setEApellido("El apellido debe tener al menos 3 caracteres")
+    } else if (/\d/.test(value)) {
+      setEApellido("El apellido no puede contener números")
+    } else {
+      setEApellido("")
+    }
+  }
+
+  if (name === "colorFavorito") {
+    if (value === "") {
+      setEColor("Selecciona un color")
+    } else {
+      setEColor("")
+    }
+  }
+
+  if (name === "comentario") {
+    if (value.length < 10) {
+      setEComentario("Debe tener al menos 10 caracteres")
+    } else if (value.length > 200) {
+      setEComentario("Máximo 200 caracteres")
+    } else {
+      setEComentario("")
+    }
+  }
+
+  if (name === "fechaNacimiento") {
+    const hoy = new Date()
+    const fechaIngresada = new Date(value)
+    if (!value) {
+      setEFecha("Debes ingresar una fecha")
+    } else if (fechaIngresada > hoy) {
+      setEFecha("La fecha no puede ser en el futuro")
+    } else {
+      setEFecha("")
+    }
+  }}
+
+  const handlePersonaA = (name: string, value: string) => {
+      if (name === "edad") {
+    const edadNum = Number(value);
+    setPersonaA({ ...personaA, [name]: edadNum });
+
+    if (edadNum <= 0) {
+      setEEdad("La edad debe ser mayor a 0");
+    } else if (edadNum > 120) {
+      setEEdad("La edad no puede ser mayor a 120");
+    } else {
+      setEEdad("");
+    }
+    return;
+  }
+
+  setPersonaA({ ...personaA, [name]: value });
+
+  if (name === "nombre") {
+    if (value.length < 3) {
+      setENombre("El nombre debe tener al menos 3 caracteres");
+    } else if (/\d/.test(value)) {
+      setENombre("El nombre no puede contener números");
+    } else {
+      setENombre("");
+    }
+  }
+
+  if (name === "apellido") {
+    if (value.length < 3) {
+      setEApellido("El apellido debe tener al menos 3 caracteres");
+    } else if (/\d/.test(value)) {
+      setEApellido("El apellido no puede contener números");
+    } else {
+      setEApellido("");
+    }
+  }
+
+  if (name === "colorFavorito") {
+    setEColor(value === "" ? "Selecciona un color" : "");
+  }
+
+  if (name === "comentario") {
+    if (value.length < 10) {
+      setEComentario("Debe tener al menos 10 caracteres");
+    } else if (value.length > 200) {
+      setEComentario("Máximo 200 caracteres");
+    } else {
+      setEComentario("");
+    }
+  }
+
+  if (name === "fechaNacimiento") {
+    const hoy = new Date();
+    const fechaIngresada = new Date(value);
+    if (!value) {
+      setEFecha("Debes ingresar una fecha");
+    } else if (fechaIngresada > hoy) {
+      setEFecha("La fecha no puede ser en el futuro");
+    } else {
+      setEFecha("");
+    }
+  }}
+
+
+  const handleActualizar = (e: React.FormEvent)=>{
+    e.preventDefault()
+    if (eNombre || eEdad) {
+      alert("Corrige los errores antes de actualizar.");
+      return;
+    }
+
     const nuevasPersonas = personas.map(p =>
       p.id == personaA.id ? personaA : p
     )
@@ -108,7 +227,7 @@ export default function Home() {
               type="text"
               placeholder="Apellido"
               onChange={(e)=>{handlePersona(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-          <span></span>
+          <span>{eApellido}</span>
 
           <label>Edad</label><br/>
           <input
@@ -134,6 +253,7 @@ export default function Home() {
               <option value="Negro">Negro</option>
               <option value="Rosa">Rosa</option>
               </select><br/>
+            <span>{eColor}</span>
 
           <label>Comentario</label><br />
           <textarea
@@ -142,6 +262,7 @@ export default function Home() {
             value={persona.comentario}
             onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}
           /><br />
+          <span>{eComentario}</span>
 
           <label>Fecha de nacimiento</label><br />
           <input
@@ -150,9 +271,10 @@ export default function Home() {
             value={persona.fechaNacimiento}
             onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}
           /><br />
+          <span>{eFecha}</span>
 
           <button 
-          onClick={()=>{handleRegistrar()}}>Registrar</button>
+          onClick={(e)=>{handleRegistrar(e)}}>Registrar</button>
         </form>
         <MostrarPersonas saludo = "Hola Como estas" traerPersona = {traerPersona} refrescar={refrescar} eliminarPersona={eliminarPersona}/>
         <form>
@@ -173,7 +295,7 @@ export default function Home() {
               placeholder="Apellido"
               value={personaA.apellido}
               onChange={(e)=>{handlePersonaA(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-          <span></span>
+          <span>{eApellido}</span>
 
           <label>Edad</label><br/>
           <input
@@ -199,6 +321,7 @@ export default function Home() {
               <option value="Negro">Negro</option>
               <option value="Rosa">Rosa</option>
               </select><br/>
+              <span>{eColor}</span>
 
             <label>Comentario</label><br />
             <textarea
@@ -207,6 +330,7 @@ export default function Home() {
               value={personaA.comentario}
               onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
             /><br />
+            <span>{eComentario}</span>
 
             <label>Fecha de nacimiento</label><br />
             <input
@@ -215,9 +339,10 @@ export default function Home() {
               value={personaA.fechaNacimiento}
               onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
             /><br />
+            <span>{eFecha}</span>
 
           <button 
-          onClick={(e)=>{e.preventDefault(), handleActualizar()}}>Editar</button>
+          onClick={(e)=>{e.preventDefault(), handleActualizar(e)}}>Editar</button>
         </form>       
         </>
       );
