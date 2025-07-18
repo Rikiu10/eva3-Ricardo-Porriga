@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Persona } from "./Interfaces/IPersona";
 import MostrarPersonas from "./MostrarPersonas";
+import { obtenerPersonas, registrarPersona } from "./Firebase/Promesas";
 
 
 const  initialStatePersona:Persona = {
@@ -26,13 +27,15 @@ export default function Home() {
   const [eComentario, setEComentario] = useState("")
   const [eFecha, setEFecha] = useState("")
 
-  useEffect(()=>{
-    let listadoStr = miStorage.getItem("personas")
-    if(listadoStr != null){
-      let listado = JSON.parse(listadoStr)
-      setPersonas(listado)
-    }
-  },[]) 
+
+  useEffect(() => {
+    const traerDatos = async () => {
+      const listado = await obtenerPersonas();
+      setPersonas(listado);
+    };
+    traerDatos();
+  }, [refrescar]);
+
 
   const handleRegistrar = (e: React.FormEvent)=>{
     e.preventDefault()
@@ -43,9 +46,10 @@ export default function Home() {
     }
 
     const nuevaPersona = { ...persona, id: crypto.randomUUID()} 
-    const nuevasPersonas = [...personas, nuevaPersona]
-    miStorage.setItem("personas",JSON.stringify(nuevasPersonas))
-    setPersonas(nuevasPersonas)
+    //const nuevasPersonas = [...personas, nuevaPersona]
+    //miStorage.setItem("personas",JSON.stringify(nuevasPersonas))
+    //setPersonas(nuevasPersonas)
+    await registrarPersona(nuevaPersona);
     setPersona(initialStatePersona) 
     setRefrescar(!refrescar) 
   }
