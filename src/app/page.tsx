@@ -58,8 +58,8 @@ export default function Home() {
 
     if (edadNum <= 0) {
       setEEdad("La edad debe ser mayor a 0")
-    } else if (edadNum > 120) {
-      setEEdad("La edad no puede ser mayor a 120")
+    } else if (edadNum > 100) {
+      setEEdad("La edad no puede ser mayor a 100")
     } else {
       setEEdad("")
     }
