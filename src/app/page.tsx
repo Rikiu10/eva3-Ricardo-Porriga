@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Persona } from "./Interfaces/IPersona";
 import MostrarPersonas from "./MostrarPersonas";
 import { obtenerPersonas, registrarPersona } from "./Firebase/Promesas";
-
+import {eliminarPersonaFirebase} from "./Firebase/Promesas";
 
 const  initialStatePersona:Persona = {
   id:"",
@@ -37,7 +37,7 @@ export default function Home() {
   }, [refrescar]);
 
 
-  const handleRegistrar = (e: React.FormEvent)=>{
+  const handleRegistrar = async(e: React.FormEvent)=>{
     e.preventDefault()
     
   if (eNombre || eEdad) {
@@ -50,6 +50,7 @@ export default function Home() {
     //miStorage.setItem("personas",JSON.stringify(nuevasPersonas))
     //setPersonas(nuevasPersonas)
     await registrarPersona(nuevaPersona);
+
     setPersona(initialStatePersona) 
     setRefrescar(!refrescar) 
   }
@@ -202,10 +203,8 @@ export default function Home() {
     setRefrescar(!refrescar)
   }
 
-  const eliminarPersona =(id: string) => {
-    const nuevasPersonas = personas.filter((p) => p.id !== id)
-    miStorage.setItem("personas", JSON.stringify(nuevasPersonas))
-    setPersonas(nuevasPersonas)
+  const eliminarPersona = async(id: string) => {
+    await eliminarPersonaFirebase(id)
     setRefrescar(!refrescar)
   }
 
