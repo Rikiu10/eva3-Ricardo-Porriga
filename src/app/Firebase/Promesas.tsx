@@ -2,6 +2,7 @@ import { addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "./Conexion";
 import { Persona } from "../Interfaces/IPersona";
 import { deleteDoc, doc } from "firebase/firestore";
+import { updateDoc } from "firebase/firestore";
 
 
 export const registrarPersona = async(p:Persona)=>{
@@ -15,6 +16,18 @@ console.log("Document written with ID: ", docRef.id);
 export const eliminarPersonaFirebase = async (id: string) => {
   const personaRef = doc(db, "personas", id);
   await deleteDoc(personaRef);
+};
+
+export const actualizarPersonaFirebase = async (p: Persona) => {
+  const personaRef = doc(db, "personas", p.id);
+  await updateDoc(personaRef, {
+    nombre: p.nombre,
+    apellido: p.apellido,
+    edad: p.edad,
+    colorFavorito: p.colorFavorito,
+    comentario: p.comentario,
+    fechaNacimiento: p.fechaNacimiento,
+  });
 };
 
 

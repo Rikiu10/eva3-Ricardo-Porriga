@@ -4,6 +4,7 @@ import { Persona } from "./Interfaces/IPersona";
 import MostrarPersonas from "./MostrarPersonas";
 import { obtenerPersonas, registrarPersona } from "./Firebase/Promesas";
 import {eliminarPersonaFirebase} from "./Firebase/Promesas";
+import { actualizarPersonaFirebase } from "./Firebase/Promesas";
 
 const  initialStatePersona:Persona = {
   id:"",
@@ -46,9 +47,6 @@ export default function Home() {
     }
 
     const nuevaPersona = { ...persona, id: crypto.randomUUID()} 
-    //const nuevasPersonas = [...personas, nuevaPersona]
-    //miStorage.setItem("personas",JSON.stringify(nuevasPersonas))
-    //setPersonas(nuevasPersonas)
     await registrarPersona(nuevaPersona);
 
     setPersona(initialStatePersona) 
@@ -187,12 +185,14 @@ export default function Home() {
   }}
 
 
-  const handleActualizar = (e: React.FormEvent)=>{
+  const handleActualizar = async(e: React.FormEvent)=>{
     e.preventDefault()
     if (eNombre || eEdad) {
       alert("Corrige los errores antes de actualizar.");
       return;
     }
+
+    await actualizarPersonaFirebase(personaA)
 
     const nuevasPersonas = personas.map(p =>
       p.id == personaA.id ? personaA : p
